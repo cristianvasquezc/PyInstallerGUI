@@ -210,16 +210,12 @@ class PyInstallerUI:
         nb.add(tab, text="Avanzado")
 
         ttk.Label(tab, text="Debug").grid(row=0, column=0, sticky="w", padx=5, pady=5)
-        self.debug = ttk.Combobox(tab, values=["", "all", "imports"], width=20)
+        self.debug = ttk.Combobox(tab, values=["", "all", "imports"], width=20, state="readonly")
         self.debug.grid(row=0, column=1, padx=5)
 
         ttk.Label(tab, text="Log level").grid(row=1, column=0, sticky="w", padx=5, pady=5)
-        self.loglevel = ttk.Combobox(tab, values=["", "DEBUG", "INFO", "WARN"], width=20)
+        self.loglevel = ttk.Combobox(tab, values=["", "DEBUG", "INFO", "WARN"], width=20, state="readonly")
         self.loglevel.grid(row=1, column=1, padx=5)
-
-        ttk.Label(tab, text="Key (encriptar bytecode)").grid(row=2, column=0, sticky="w", padx=5, pady=5)
-        self.entry_key = ttk.Entry(tab, width=23)
-        self.entry_key.grid(row=2, column=1, padx=5)
 
     # ================= LÓGICA =================
     def pick_script(self):
@@ -317,10 +313,7 @@ class PyInstallerUI:
     
         if self.loglevel.get():
             cmd.append(f'--log-level {self.loglevel.get()}')
-    
-        if self.entry_key.get():
-            cmd.append(f'--key {self.entry_key.get()}')
-    
+            
         cmd.append(f'"{script}"')
     
         BuildWindow(self.root, " ".join(cmd))
@@ -356,7 +349,6 @@ def simple_input(parent):
     ttk.Button(w, text="OK", command=ok).pack(pady=5)
     w.wait_window()
     return result[0] if result else None
-
 
 # =========================
 def center_window(root, width, height):
