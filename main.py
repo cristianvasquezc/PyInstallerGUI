@@ -14,6 +14,7 @@ class BuildWindow(tk.Toplevel):
         self.title("Proceso PyInstaller")
         self.geometry("720x460")
         self.resizable(False, False)
+        self.center_window(720, 460)
 
         ttk.Label(self, text="Comando generado").pack(anchor="w", padx=10, pady=(10, 2))
         self.txt_cmd = tk.Text(self, height=4)
@@ -33,6 +34,16 @@ class BuildWindow(tk.Toplevel):
         ttk.Button(self, text="Cerrar", command=self.destroy).pack(pady=5)
 
         threading.Thread(target=self.run_build, args=(command,), daemon=True).start()
+
+    def center_window(root, width, height):
+        root.update_idletasks()
+        screen_width = root.winfo_screenwidth()
+        screen_height = root.winfo_screenheight()
+        
+        x = (screen_width // 2) - (width // 2)
+        y = (screen_height // 2) - (height // 2)
+        
+        root.geometry(f"{width}x{height}+{x}+{y}")
 
     # -------- helper para escribir logs --------
     def log(self, text):
@@ -338,7 +349,20 @@ def simple_input(parent):
 
 
 # =========================
+def center_window(root, width, height):
+    root.update_idletasks()
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    
+    x = (screen_width // 2) - (width // 2)
+    y = (screen_height // 2) - (height // 2)
+    
+    root.geometry(f"{width}x{height}+{x}+{y}")
+
 if __name__ == "__main__":
     root = tk.Tk()
+    root.withdraw()
     PyInstallerUI(root)
+    center_window(root, 780, 430)
+    root.deiconify()   
     root.mainloop()
