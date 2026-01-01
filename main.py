@@ -184,13 +184,16 @@ class PyInstallerUI:
         # ===== PROCESAR =====
         button_frame = tk.Frame(main)
         button_frame.grid(row=5, column=0, columnspan=4, sticky="e", pady=(0, 8))
+        
+        style = ttk.Style()
+        style.configure("Big.TButton", font=("", 14, "bold"))
 
         ttk.Button(
             button_frame, 
             text="Procesar", 
             command=self.process,
-            width=15,
-            padding=(30, 13)
+            padding=(10, 10),
+            style="Big.TButton" 
         ).pack(side="right")
 
     # ================= TABS =================
@@ -208,9 +211,10 @@ class PyInstallerUI:
         self.list_data.pack(fill="both", expand=True)
 
         btns = ttk.Frame(main_frame)
-        btns.pack(side="left", fill="y", padx=(5, 0))
+        btns.pack(side="left", fill="y", padx=(10, 0))
 
-        ttk.Button(btns, text="Añadir", command=self.add_data).pack(fill="x", pady=(0, 5))
+        ttk.Button(btns, text="Añadir Archivo", command=self.add_data_file).pack(fill="x", pady=(0, 5))
+        ttk.Button(btns, text="Añadir Carpeta", command=self.add_data_folder).pack(fill="x", pady=(0, 5))
         ttk.Button(btns, text="Eliminar", command=self.remove_data).pack(fill="x")
 
     def tab_imports(self, nb):
@@ -227,7 +231,7 @@ class PyInstallerUI:
         self.list_imports.pack(fill="both", expand=True)
 
         btns = ttk.Frame(main_frame)
-        btns.pack(side="left", fill="y", padx=(5, 0))
+        btns.pack(side="left", fill="y", padx=(10, 0))
 
         ttk.Button(btns, text="Añadir", command=self.add_import).pack(fill="x", pady=(0, 5))
         ttk.Button(btns, text="Eliminar", command=self.remove_import).pack(fill="x")
@@ -265,11 +269,18 @@ class PyInstallerUI:
             self.icon_img = ImageTk.PhotoImage(img)
             self.icon_label.config(image=self.icon_img)
 
-    def add_data(self):
-        f = filedialog.askopenfilename()
-        if f:
-            self.data_files.append(f)
-            self.list_data.insert(tk.END, f)
+    def add_data_file(self):
+        files = filedialog.askopenfilenames(title="Seleccionar archivos")
+        for f in files:
+            if f and f not in self.data_files:
+                self.data_files.append(f)
+                self.list_data.insert(tk.END, f"{f} (Archivo)")
+    
+    def add_data_folder(self):
+        folder = filedialog.askdirectory(title="Seleccionar carpeta")
+        if folder and folder not in self.data_files:
+            self.data_files.append(folder)
+            self.list_data.insert(tk.END, f"{folder} (Carpeta)")
 
     def remove_data(self):
         sel = self.list_data.curselection()
