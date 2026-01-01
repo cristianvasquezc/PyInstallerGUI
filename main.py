@@ -3,6 +3,7 @@ from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 import subprocess
 import threading
+import sys
 import os
 
 # =========================
@@ -15,6 +16,9 @@ class BuildWindow(tk.Toplevel):
         self.geometry("720x460")
         self.resizable(False, False)
         self.center_window(720, 460)
+
+        if os.path.exists(resource_path("icon.ico")):
+            self.iconbitmap(resource_path("icon.ico"))
 
         ttk.Label(self, text="Comando generado").pack(anchor="w", padx=10, pady=(10, 2))
         self.txt_cmd = tk.Text(self, height=4)
@@ -335,6 +339,10 @@ def simple_input(parent):
     y = (screen_height // 2) - (height // 2)
     w.geometry(f"{width}x{height}+{x}+{y}")
 
+    icon_path = resource_path("icon.ico")
+    if os.path.exists(icon_path):
+        w.iconbitmap(icon_path)
+
     ttk.Label(w, text="Nombre del módulo").pack(pady=10)
     e = ttk.Entry(w,width=40)
     e.pack(padx=10)
@@ -361,9 +369,17 @@ def center_window(root, width, height):
     
     root.geometry(f"{width}x{height}+{x}+{y}")
 
+def resource_path(rel_path):
+    try:
+        base = sys._MEIPASS
+    except:
+        base = os.path.abspath(".")
+    return os.path.join(base, rel_path)
+
 if __name__ == "__main__":
     root = tk.Tk()
     root.withdraw()
+    root.iconbitmap(resource_path("icon.ico"))
     PyInstallerUI(root)
     center_window(root, 780, 430)
     root.deiconify()   
