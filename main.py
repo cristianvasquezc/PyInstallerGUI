@@ -111,6 +111,7 @@ class PyInstallerUI:
         root.configure(bg="#f0f0f0")
 
         self.data_files = []
+        self.binaries = []
         self.hidden_imports = []
         self.icon_path = None
         self.icon_img = None
@@ -182,6 +183,7 @@ class PyInstallerUI:
         notebook.grid(row=4, column=0, columnspan=4, sticky="nsew", pady=10)
 
         self.tab_data(notebook)
+        self.tab_binaries(notebook) 
         self.tab_imports(notebook)
         self.tab_advanced(notebook)
 
@@ -220,6 +222,34 @@ class PyInstallerUI:
         ttk.Button(btns, text="Añadir Archivo", command=self.add_data_file).pack(fill="x", pady=(0, 5))
         ttk.Button(btns, text="Añadir Carpeta", command=self.add_data_folder).pack(fill="x", pady=(0, 5))
         ttk.Button(btns, text="Eliminar", command=self.remove_data).pack(fill="x")
+
+    def tab_binaries(self, nb):
+        tab = ttk.Frame(nb)
+        nb.add(tab, text="Binarios")
+    
+        main_frame = ttk.Frame(tab)
+        main_frame.pack(fill="both", expand=True, padx=5, pady=5)
+    
+        list_frame = ttk.Frame(main_frame)
+        list_frame.pack(side="left", fill="both", expand=True)
+    
+        self.list_binaries = tk.Listbox(list_frame, height=6)
+        self.list_binaries.pack(fill="both", expand=True)
+    
+        btns = ttk.Frame(main_frame)
+        btns.pack(side="left", fill="y", padx=(10, 0))
+    
+        ttk.Button(
+            btns,
+            text="Añadir Archivo",
+            command=self.add_binary_file
+        ).pack(fill="x", pady=(0, 5))
+    
+        ttk.Button(
+            btns,
+            text="Eliminar",
+            command=self.remove_binary
+        ).pack(fill="x")
 
     def tab_imports(self, nb):
         tab = ttk.Frame(nb)
@@ -292,6 +322,19 @@ class PyInstallerUI:
             self.data_files.pop(sel[0])
             self.list_data.delete(sel)
 
+    def add_binary_file(self):
+        files = filedialog.askopenfilenames(title="Seleccionar binarios")
+        for f in files:
+            if f and f not in self.binaries:
+                self.binaries.append(f)
+                self.list_binaries.insert(tk.END, f)
+
+    def remove_binary(self):
+        sel = self.list_binaries.curselection()
+        if sel:
+            self.binaries.pop(sel[0])
+            self.list_binaries.delete(sel)
+    
     def add_import(self):
         name = simple_input(self.root)
         if name:
@@ -346,6 +389,9 @@ class PyInstallerUI:
     
         for f in self.data_files:
             cmd.append(f'--add-data "{f};."')
+
+        for b in self.binaries:
+            cmd.append(f'--add-binary "{b};."')
     
         for h in self.hidden_imports:
             cmd.append(f'--hidden-import {h}')
@@ -399,7 +445,7 @@ def simple_input(parent):
 
 def get_pyinstaller_cmd():
     if hasattr(sys, "_MEIPASS"):
-        exe = os.path.join(sys._MEIPASS, "pyinstaller", "pyinstaller.exe")
+        exe = os.path.join(sys._MEIPASS, "pyinstaller.exe")
         if os.path.exists(exe):
             return f'"{exe}"'
 
