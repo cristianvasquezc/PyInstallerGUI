@@ -11,8 +11,10 @@ import os
 # VENTANA DE LOGS
 # =========================
 class BuildWindow(tk.Toplevel):
-    def __init__(self, parent, command):
+    def __init__(self, parent, command, workdir):
         super().__init__(parent)
+        self.workdir = workdir
+        
         self.title("Proceso PyInstaller")
         self.resizable(False, False)
         self.center_window(720, 460)
@@ -65,6 +67,7 @@ class BuildWindow(tk.Toplevel):
         process = subprocess.Popen(
             command,
             shell=True,
+            cwd=self.workdir,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True
@@ -370,7 +373,8 @@ class PyInstallerUI:
             
         cmd.append(f'"{script}"')
     
-        BuildWindow(self.root, " ".join(cmd))
+        workdir = os.path.abspath(os.path.dirname(script))
+        BuildWindow(self.root, " ".join(cmd), workdir)
 
 # =========================
 def simple_input(parent):
