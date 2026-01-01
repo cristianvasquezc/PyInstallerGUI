@@ -13,9 +13,11 @@ class BuildWindow(tk.Toplevel):
     def __init__(self, parent, command):
         super().__init__(parent)
         self.title("Proceso PyInstaller")
-        self.geometry("720x460")
         self.resizable(False, False)
         self.center_window(720, 460)
+
+        self.transient(parent)
+        self.grab_set()
 
         if os.path.exists(resource_path("icon.ico")):
             self.iconbitmap(resource_path("icon.ico"))
@@ -79,7 +81,7 @@ class BuildWindow(tk.Toplevel):
                 0,
                 lambda: messagebox.showinfo(
                     "Build finalizado",
-                    "El proceso terminó correctamente.\n\nEl ejecutable ya fue generado."
+                    "El proceso terminó correctamente.\n\nEl ejecutable ya fue generado.", parent=self
                 )
             )
         else:
@@ -88,7 +90,8 @@ class BuildWindow(tk.Toplevel):
                 0,
                 lambda: messagebox.showerror(
                     "Build con errores",
-                    "El proceso terminó, pero hubo errores.\nRevisa los logs."
+                    "El proceso terminó, pero hubo errores.\nRevisa los logs.",
+                    parent=self
                 )
             )
 
@@ -100,7 +103,6 @@ class PyInstallerUI:
     def __init__(self, root):
         self.root = root
         root.title("PyInstaller GUI Builder")
-        root.geometry("780x430")
         root.resizable(False, False)
         root.configure(bg="#f0f0f0")
 
@@ -381,6 +383,6 @@ if __name__ == "__main__":
     root.withdraw()
     root.iconbitmap(resource_path("icon.ico"))
     PyInstallerUI(root)
-    center_window(root, 780, 430)
+    center_window(root, 780, 400)
     root.deiconify()   
     root.mainloop()
