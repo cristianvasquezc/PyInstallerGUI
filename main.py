@@ -198,26 +198,38 @@ class PyInstallerUI:
         tab = ttk.Frame(nb)
         nb.add(tab, text="Datos")
 
-        self.list_data = tk.Listbox(tab, height=6)
-        self.list_data.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+        main_frame = ttk.Frame(tab)
+        main_frame.pack(fill="both", expand=True, padx=5, pady=5)
 
-        btns = ttk.Frame(tab)
-        btns.pack(side="right", pady=5)
+        list_frame = ttk.Frame(main_frame)
+        list_frame.pack(side="left", fill="both", expand=True)
 
-        ttk.Button(btns, text="Añadir", command=self.add_data).pack(fill="x", pady=2)
+        self.list_data = tk.Listbox(list_frame, height=6)
+        self.list_data.pack(fill="both", expand=True)
+
+        btns = ttk.Frame(main_frame)
+        btns.pack(side="left", fill="y", padx=(5, 0))
+
+        ttk.Button(btns, text="Añadir", command=self.add_data).pack(fill="x", pady=(0, 5))
         ttk.Button(btns, text="Eliminar", command=self.remove_data).pack(fill="x")
 
     def tab_imports(self, nb):
         tab = ttk.Frame(nb)
         nb.add(tab, text="Imports")
 
-        self.list_imports = tk.Listbox(tab, height=6)
-        self.list_imports.pack(side="left", fill="both", expand=True, padx=5, pady=5)
+        main_frame = ttk.Frame(tab)
+        main_frame.pack(fill="both", expand=True, padx=5, pady=5)
 
-        btns = ttk.Frame(tab)
-        btns.pack(side="right", pady=5)
+        list_frame = ttk.Frame(main_frame)
+        list_frame.pack(side="left", fill="both", expand=True)
 
-        ttk.Button(btns, text="Añadir", command=self.add_import).pack(fill="x", pady=2)
+        self.list_imports = tk.Listbox(list_frame, height=6)
+        self.list_imports.pack(fill="both", expand=True)
+
+        btns = ttk.Frame(main_frame)
+        btns.pack(side="left", fill="y", padx=(5, 0))
+
+        ttk.Button(btns, text="Añadir", command=self.add_import).pack(fill="x", pady=(0, 5))
         ttk.Button(btns, text="Eliminar", command=self.remove_import).pack(fill="x")
 
     def tab_advanced(self, nb):
