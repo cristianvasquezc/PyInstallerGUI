@@ -182,7 +182,16 @@ class PyInstallerUI:
         self.tab_advanced(notebook)
 
         # ===== PROCESAR =====
-        ttk.Button(self.root, text="Procesar", command=self.process).pack(pady=(0, 8))
+        button_frame = tk.Frame(main)
+        button_frame.grid(row=5, column=0, columnspan=4, sticky="e", pady=(0, 8))
+
+        ttk.Button(
+            button_frame, 
+            text="Procesar", 
+            command=self.process,
+            width=15,
+            padding=(30, 13)
+        ).pack(side="right")
 
     # ================= TABS =================
     def tab_data(self, nb):
@@ -383,6 +392,6 @@ if __name__ == "__main__":
     root.withdraw()
     root.iconbitmap(resource_path("icon.ico"))
     PyInstallerUI(root)
-    center_window(root, 780, 400)
+    center_window(root, 780, 420)
     root.deiconify()   
     root.mainloop()
