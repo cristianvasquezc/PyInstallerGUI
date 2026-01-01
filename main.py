@@ -3,6 +3,7 @@ from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 import subprocess
 import threading
+import shutil
 import sys
 import os
 
@@ -319,9 +320,24 @@ class PyInstallerUI:
                 "Debe seleccionar la carpeta de salida"
             )
             return
-    
+
+        #! ===== START LIMPIEZA PREVIA (build y .spec) =====
+        for file in os.listdir("."):
+            if file.lower().endswith(".spec"):
+                try:
+                    os.remove(file)
+                except Exception:
+                    pass
+
+        if os.path.exists("build"):
+            try:
+                shutil.rmtree("build")
+            except Exception as e:
+                pass
+        #! ===== END LIMPIEZA PREVIA (build y .spec) =====
+
         # ===== COMANDO BASE =====
-        cmd = ["pyinstaller"]
+        cmd = [get_pyinstaller_cmd()]
     
         if self.onefile.get(): cmd.append("--onefile")
         if self.windowed.get(): cmd.append("--windowed")
@@ -391,6 +407,14 @@ def simple_input(parent):
     ttk.Button(w, text="OK", command=ok).pack(pady=5)
     w.wait_window()
     return result[0] if result else None
+
+def get_pyinstaller_cmd():
+    if hasattr(sys, "_MEIPASS"):
+        exe = os.path.join(sys._MEIPASS, "pyinstaller", "pyinstaller.exe")
+        if os.path.exists(exe):
+            return f'"{exe}"'
+
+    return "pyinstaller"
 
 # =========================
 def center_window(root, width, height):
