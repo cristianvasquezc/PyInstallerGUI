@@ -324,21 +324,6 @@ class PyInstallerUI:
             )
             return
 
-        #! ===== START LIMPIEZA PREVIA (build y .spec) =====
-        for file in os.listdir("."):
-            if file.lower().endswith(".spec"):
-                try:
-                    os.remove(file)
-                except Exception:
-                    pass
-
-        if os.path.exists("build"):
-            try:
-                shutil.rmtree("build")
-            except Exception as e:
-                pass
-        #! ===== END LIMPIEZA PREVIA (build y .spec) =====
-
         # ===== COMANDO BASE =====
         cmd = [get_pyinstaller_cmd()]
     
