@@ -89,7 +89,7 @@ cd PyInstallerGUI
 2. **Crear un entorno virtual (recomendado)**
 
 ```bash
-python -m venv venv
+python -m venv .venv
 ```
 
 3. **Activar el entorno virtual**
@@ -97,13 +97,13 @@ python -m venv venv
 En Windows:
 
 ```bash
-venv\Scripts\activate
+.venv\Scripts\activate
 ```
 
 En Linux/macOS:
 
 ```bash
-source venv/bin/activate
+source .venv/bin/activate
 ```
 
 4. **Instalar dependencias**
@@ -192,7 +192,7 @@ PyInstallerGUI/
 Para distribuir PyInstaller GUI Builder como un ejecutable independiente:
 
 ```bash
-pyinstaller --onefile --windowed --icon=icon.ico --name=PyInstallerGUI main.py
+pyinstaller --onefile --windowed --icon=icon.ico --name=PyInstallerGUI --add-data "icon.ico;." --add-binary ".venv/Scripts/pyinstaller.exe;." main.py
 ```
 
 O simplemente usa la propia aplicación para compilarse a sí misma:
