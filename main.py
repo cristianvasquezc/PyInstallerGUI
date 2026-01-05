@@ -368,7 +368,7 @@ class PyInstallerUI:
             return
 
         # ===== COMANDO BASE =====
-        cmd = [get_pyinstaller_cmd()]
+        cmd = ["pyinstaller"]
     
         if self.onefile.get(): cmd.append("--onefile")
         if self.windowed.get(): cmd.append("--windowed")
@@ -468,14 +468,6 @@ def simple_input(parent):
     ttk.Button(w, text="OK", command=ok).pack(pady=5)
     w.wait_window()
     return result[0] if result else None
-
-def get_pyinstaller_cmd():
-    if hasattr(sys, "_MEIPASS"):
-        exe = os.path.join(sys._MEIPASS, "pyinstaller.exe")
-        if os.path.exists(exe):
-            return f'"{exe}"'
-
-    return "pyinstaller"
 
 # =========================
 def center_window(root, width, height):
