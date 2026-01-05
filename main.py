@@ -387,11 +387,37 @@ class PyInstallerUI:
     
         cmd.append(f'--distpath "{dist}"')
     
+        # Helper para calcular destino
+        def get_dest(path, base_dir):
+            try:
+                abs_path = os.path.abspath(path)
+                abs_base = os.path.abspath(base_dir)
+                
+                if os.path.splitdrive(abs_path)[0].lower() != os.path.splitdrive(abs_base)[0].lower():
+                    return os.path.basename(abs_path) if os.path.isdir(abs_path) else "."
+
+                rel = os.path.relpath(abs_path, abs_base)
+                
+                if rel.startswith(".."):
+                    return os.path.basename(abs_path) if os.path.isdir(abs_path) else "."
+                
+                if os.path.isfile(abs_path):
+                    d = os.path.dirname(rel)
+                    return d if d else "."
+                else:
+                    return rel
+            except Exception:
+                return "."
+
+        workdir = os.path.dirname(os.path.abspath(script))
+
         for f in self.data_files:
-            cmd.append(f'--add-data "{f};."')
+            dest = get_dest(f, workdir)
+            cmd.append(f'--add-data "{f};{dest}"')
 
         for b in self.binaries:
-            cmd.append(f'--add-binary "{b};."')
+            dest = get_dest(b, workdir)
+            cmd.append(f'--add-binary "{b};{dest}"')
     
         for h in self.hidden_imports:
             cmd.append(f'--hidden-import {h}')
