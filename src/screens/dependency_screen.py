@@ -10,7 +10,7 @@ class DependencyWindow(tk.Toplevel):
         self.title("Dependencias requeridas")
         self.set_app_icon()
         self.resizable(False, False)
-        self.center_window(460, 200)
+        self.center_window(460, 180)
         self.deiconify()
         self.transient(parent)
         self.grab_set()
@@ -48,3 +48,6 @@ class DependencyWindow(tk.Toplevel):
         btn_pyinstaller.grid(row=1, column=1, sticky="e")
         if pyinstaller_ok:
             btn_pyinstaller.state(["disabled"])
+        
+        ttk.Button(self, text="Cerrar", command=self.destroy).pack(pady=(15, 0))
+        
