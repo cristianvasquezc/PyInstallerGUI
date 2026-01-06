@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
-from src.utils import resource_path, set_app_icon, center_window
 import subprocess
 import threading
 import os
@@ -12,9 +11,9 @@ class BuildWindow(tk.Toplevel):
         self.workdir = workdir
         
         self.title("Proceso PyInstaller")
-        set_app_icon(self)
+        self.set_app_icon()
         self.resizable(False, False)
-        center_window(self, 720, 460)
+        self.center_window(720, 460)
 
         self.transient(parent)
         self.grab_set()
@@ -38,15 +37,7 @@ class BuildWindow(tk.Toplevel):
 
         threading.Thread(target=self.run_build, args=(command,), daemon=True).start()
 
-    def center_window(self, width, height):
-        self.update_idletasks()
-        screen_width = self.winfo_screenwidth()
-        screen_height = self.winfo_screenheight()
-        
-        x = (screen_width // 2) - (width // 2)
-        y = (screen_height // 2) - (height // 2)
-        
-        self.geometry(f"{width}x{height}+{x}+{y}")
+
 
     def log(self, text):
         self.txt_logs.config(state="normal")
