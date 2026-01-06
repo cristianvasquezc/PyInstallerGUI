@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
-from src.utils import resource_path, set_app_icon, center_window
 import webbrowser
 
 class DependencyWindow(tk.Toplevel):
@@ -8,9 +7,9 @@ class DependencyWindow(tk.Toplevel):
         super().__init__(parent)
 
         self.title("Dependencias requeridas")
-        set_app_icon(self)
+        self.set_app_icon()
         self.resizable(False, False)
-        center_window(self, 460, 200)
+        self.center_window(460, 200)
         self.transient(parent)
         self.grab_set()
 
