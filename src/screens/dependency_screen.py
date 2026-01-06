@@ -6,10 +6,12 @@ class DependencyWindow(tk.Toplevel):
     def __init__(self, parent, python_ok, pyinstaller_ok):
         super().__init__(parent)
 
+        self.withdraw()
         self.title("Dependencias requeridas")
         self.set_app_icon()
         self.resizable(False, False)
         self.center_window(460, 200)
+        self.deiconify()
         self.transient(parent)
         self.grab_set()
 
