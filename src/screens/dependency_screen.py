@@ -8,12 +8,12 @@ class DependencyWindow(tk.Toplevel):
         super().__init__(parent)
 
         self.title("Dependencias requeridas")
-        self.resizable(False, False)
         set_app_icon(self)
+        self.resizable(False, False)
+        center_window(self, 460, 200)
         self.transient(parent)
         self.grab_set()
 
-        center_window(self, 460, 200)
 
         ttk.Label(
             self,

@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 from src.screens.build_screen import BuildWindow
-from src.utils import resource_path, set_app_icon, check_env
+from src.utils import resource_path, set_app_icon, center_window, check_env
 import os
 
 class MainScreen:
@@ -12,6 +12,7 @@ class MainScreen:
         root.title("PyInstaller GUI Builder")
         set_app_icon(root)
         root.resizable(False, False)
+        center_window(root, 780, 420)
 
         self.data_files = []
         self.binaries = []

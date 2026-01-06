@@ -14,7 +14,7 @@ class BuildWindow(tk.Toplevel):
         self.title("Proceso PyInstaller")
         set_app_icon(self)
         self.resizable(False, False)
-        self.center_window(720, 460)
+        center_window(self, 720, 460)
 
         self.transient(parent)
         self.grab_set()
