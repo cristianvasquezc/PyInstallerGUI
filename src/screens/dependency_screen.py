@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from src.utils import resource_path, set_app_icon, center_window
+import webbrowser
 
 class DependencyWindow(tk.Toplevel):
     def __init__(self, parent, python_ok, pyinstaller_ok):
