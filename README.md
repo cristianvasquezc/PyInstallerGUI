@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![PyInstaller GUI](icon.ico)
+![PyInstaller GUI](assets/icon.ico)
 
 **Una interfaz gráfica moderna y completa para PyInstaller**
 
@@ -174,18 +174,23 @@ Esto generará: `C:\MiProyecto\dist\MiAplicacion.exe`
 ```
 PyInstallerGUI/
 │
-├── main.py                 # Aplicación principal
-├── requirements.txt        # Dependencias del proyecto
-├── icon.ico               # Icono de la aplicación
-├── installer-icon.ico     # Icono por defecto para ejecutables
-├── .gitignore            # Archivos ignorados por Git
-└── README.md             # Este archivo
+├── src/                    # Código fuente
+│   ├── screens/            # Interfaces de usuario
+│   └── utils.py           # Utilidades
+├── assets/                 # Recursos estáticos
+│   ├── icon.ico           # Icono de la aplicación
+│   ├── installer-icon.ico # Icono por defecto
+│   └── ...
+├── main.py                 # Punto de entrada
+├── requirements.txt        # Dependencias
+└── README.md              # Documentación
 ```
 
 ## 🛠️ Dependencias
 
-- **Pillow (12.0.0)**: Procesamiento de imágenes para la vista previa del icono
-- **PyInstaller (6.17.0)**: Motor de conversión a ejecutable
+- **Pillow**: Procesamiento de imágenes para la vista previa del icono
+- **PyInstaller**: Motor de conversión a ejecutable
+- **Tkinter**: Interfaz gráfica (incluido en Python)
 
 ## 🔧 Compilar la Aplicación
 
@@ -206,7 +211,13 @@ O simplemente usa la propia aplicación para compilarse a sí misma:
 
 ### Gestión de Recursos
 
-La aplicación utiliza `sys._MEIPASS` para manejar rutas de recursos cuando se ejecuta como ejecutable empaquetado, asegurando que los iconos y otros archivos se carguen correctamente.
+La aplicación utiliza un sistema robusto (`src/utils.py`) para manejar rutas de recursos. Detecta automáticamente si se está ejecutando desde el código fuente o como un ejecutable empaquetado (`sys._MEIPASS`), asegurando que la carga de assets sea transparente.
+
+### Experiencia de Usuario (UX)
+
+- **Flicker-Free**: Implementación de técnicas (`withdraw` + `center` + `deiconify`) para evitar parpadeos visuales al abrir ventanas.
+- **Resizing Inteligente**: Uso del filtro LANCZOS para redimensionar iconos sin perder calidad visual en la interfaz.
+- **Estado Dinámico**: Los botones de acción gestionan su estado (habilitado/deshabilitado) reactivamente según la selección del usuario.
 
 ### Ventana de Logs
 
