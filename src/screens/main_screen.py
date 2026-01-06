@@ -20,7 +20,7 @@ class MainScreen:
         self.icon_img = None
 
         self.placeholder_img = ImageTk.PhotoImage(
-            Image.new("RGBA", (140, 140))
+            Image.new("RGBA", (100, 100))
         )
 
         self.build_ui()
@@ -41,6 +41,8 @@ class MainScreen:
         # ===== ICONO =====
         self.icon_label = tk.Label(
             main,
+            width=100,
+            height=100,
             image=self.placeholder_img,
             relief="solid",
             borderwidth=1
@@ -210,7 +212,7 @@ class MainScreen:
         f = filedialog.askopenfilename(filetypes=[("Icon", "*.ico")])
         if f:
             self.icon_path = f
-            img = Image.open(f).resize((140, 140))
+            img = Image.open(f).resize((100, 100), Image.Resampling.LANCZOS)
             self.icon_img = ImageTk.PhotoImage(img)
             self.icon_label.config(image=self.icon_img)
 
