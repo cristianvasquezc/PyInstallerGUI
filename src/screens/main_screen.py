@@ -126,7 +126,12 @@ class MainScreen:
 
         ttk.Button(btns, text="Añadir Archivo", command=self.add_data_file).pack(fill="x", pady=(0, 5))
         ttk.Button(btns, text="Añadir Carpeta", command=self.add_data_folder).pack(fill="x", pady=(0, 5))
-        ttk.Button(btns, text="Eliminar", command=self.remove_data).pack(fill="x")
+
+        self.btn_remove_data = ttk.Button(btns, text="Eliminar", command=self.remove_data)
+        self.btn_remove_data.pack(fill="x")
+        self.btn_remove_data.state(["disabled"])
+
+        self.list_data.bind("<<ListboxSelect>>", lambda e: self.on_select(self.list_data, self.btn_remove_data))
 
     def tab_binaries(self, nb):
         tab = ttk.Frame(nb)
@@ -144,17 +149,13 @@ class MainScreen:
         btns = ttk.Frame(main_frame)
         btns.pack(side="left", fill="y", padx=(10, 0))
     
-        ttk.Button(
-            btns,
-            text="Añadir Archivo",
-            command=self.add_binary_file
-        ).pack(fill="x", pady=(0, 5))
+        ttk.Button(btns, text="Añadir Archivo", command=self.add_binary_file).pack(fill="x", pady=(0, 5))
     
-        ttk.Button(
-            btns,
-            text="Eliminar",
-            command=self.remove_binary
-        ).pack(fill="x")
+        self.btn_remove_bin = ttk.Button(btns, text="Eliminar", command=self.remove_binary)
+        self.btn_remove_bin.pack(fill="x")
+        self.btn_remove_bin.state(["disabled"])
+
+        self.list_binaries.bind("<<ListboxSelect>>", lambda e: self.on_select(self.list_binaries, self.btn_remove_bin))
 
     def tab_imports(self, nb):
         tab = ttk.Frame(nb)
@@ -173,7 +174,12 @@ class MainScreen:
         btns.pack(side="left", fill="y", padx=(10, 0))
 
         ttk.Button(btns, text="Añadir", command=self.add_import).pack(fill="x", pady=(0, 5))
-        ttk.Button(btns, text="Eliminar", command=self.remove_import).pack(fill="x")
+        
+        self.btn_remove_imp = ttk.Button(btns, text="Eliminar", command=self.remove_import)
+        self.btn_remove_imp.pack(fill="x")
+        self.btn_remove_imp.state(["disabled"])
+
+        self.list_imports.bind("<<ListboxSelect>>", lambda e: self.on_select(self.list_imports, self.btn_remove_imp))
 
     def tab_advanced(self, nb):
         tab = ttk.Frame(nb)
@@ -208,6 +214,12 @@ class MainScreen:
             self.icon_img = ImageTk.PhotoImage(img)
             self.icon_label.config(image=self.icon_img)
 
+    def on_select(self, listbox, btn):
+        if listbox.curselection():
+            btn.state(["!disabled"])
+        else:
+            btn.state(["disabled"])
+
     def add_data_file(self):
         files = filedialog.askopenfilenames(title="Seleccionar archivos")
         for f in files:
@@ -226,6 +238,7 @@ class MainScreen:
         if sel:
             self.data_files.pop(sel[0])
             self.list_data.delete(sel)
+            self.btn_remove_data.state(["disabled"])
 
     def add_binary_file(self):
         files = filedialog.askopenfilenames(title="Seleccionar binarios")
@@ -239,6 +252,7 @@ class MainScreen:
         if sel:
             self.binaries.pop(sel[0])
             self.list_binaries.delete(sel)
+            self.btn_remove_bin.state(["disabled"])
     
     def add_import(self):
         name = simple_input(self.root)
@@ -251,6 +265,7 @@ class MainScreen:
         if sel:
             self.hidden_imports.pop(sel[0])
             self.list_imports.delete(sel)
+            self.btn_remove_imp.state(["disabled"])
 
     def process(self):
         script = self.entry_script.get().strip()
