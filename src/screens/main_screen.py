@@ -359,12 +359,13 @@ class MainScreen:
 # =========================
 def simple_input(parent):
     w = tk.Toplevel(parent)
+    w.withdraw()
     w.title("Hidden import")
     w.set_app_icon()
     w.resizable(False, False)
     w.center_window(300, 100)
+    w.deiconify()
     w.grab_set()
-    w.update_idletasks()
 
     ttk.Label(w, text="Nombre del módulo").pack(pady=10)
     e = ttk.Entry(w,width=40)
