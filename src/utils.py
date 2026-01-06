@@ -1,4 +1,3 @@
-import subprocess
 import shutil
 import sys
 import os
@@ -37,18 +36,21 @@ tk.Tk.set_app_icon = set_app_icon
 tk.Toplevel.set_app_icon = set_app_icon
 
 def is_python_installed():
-    try:
-        subprocess.run(
-            ["python", "--version"],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
-        return True
-    except Exception:
-        return False
+    return True
+
+def get_python_path():
+    if getattr(sys, 'frozen', False):
+        path = shutil.which("python")
+        return path if path else sys.executable
+    else:
+        return sys.executable
+
+def get_pyinstaller_path():
+    path = shutil.which("pyinstaller")
+    return path if path else ""
 
 def is_pyinstaller_installed():
-    return shutil.which("pyinstaller") is not None
+    return get_pyinstaller_path() != ""
 
 def check_env(*buttons):
     python_ok = is_python_installed()
