@@ -2,7 +2,9 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 from src.screens.build_screen import BuildWindow
-from src.utils import check_env
+from src.screens.settings_screen import SettingsWindow
+from src.screens.about_screen import AboutWindow
+from src.utils import check_env, get_python_path, get_pyinstaller_path
 import os
 
 class MainScreen:
@@ -12,7 +14,12 @@ class MainScreen:
         root.title("PyInstaller GUI Builder")
         root.set_app_icon()
         root.resizable(False, False)
-        root.center_window(780, 380)
+        root.center_window(780, 400)
+
+        self.python_path = get_python_path()
+        self.pyinstaller_path = get_pyinstaller_path()
+        
+        self.create_menu()
 
         self.data_files = []
         self.binaries = []
@@ -111,6 +118,30 @@ class MainScreen:
         self.btn_process.pack(side="right")
 
         check_env(self.btn_process)
+
+    def create_menu(self):
+        menubar = tk.Menu(self.root)
+        self.root.config(menu=menubar)
+
+        file_menu = tk.Menu(menubar, tearoff=0)
+        file_menu.add_command(label="Configuración", command=self.open_settings)
+        file_menu.add_separator()
+        file_menu.add_command(label="Salir", command=self.root.quit)
+        menubar.add_cascade(label="Archivo", menu=file_menu)
+
+        help_menu = tk.Menu(menubar, tearoff=0)
+        help_menu.add_command(label="Acerca de", command=self.show_about)
+        menubar.add_cascade(label="Ayuda", menu=help_menu)
+
+    def open_settings(self):
+        def save_callback(py, pi):
+            self.python_path = py
+            self.pyinstaller_path = pi
+            
+        SettingsWindow(self.root, self.python_path, self.pyinstaller_path, save_callback)
+
+    def show_about(self):
+        AboutWindow(self.root)
 
     # ================= TABS =================
     def tab_data(self, nb):
@@ -330,7 +361,7 @@ class MainScreen:
             return
 
         # ===== COMANDO BASE =====
-        cmd = ["pyinstaller"]
+        cmd = [f'"{self.pyinstaller_path}"' if self.pyinstaller_path else "pyinstaller"]
     
         if self.onefile.get(): cmd.append("--onefile")
         if self.windowed.get(): cmd.append("--windowed")
