@@ -17,7 +17,7 @@ def resource_path(rel_path):
     try:
         base = sys._MEIPASS 
     except AttributeError:
-        base = os.path.abspath(os.path.dirname(__file__)) 
+        base = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) 
     return os.path.join(base, rel_path)
 
 def set_app_icon(window, icon_name="assets/icon.ico"):
