@@ -192,7 +192,7 @@ PyInstallerGUI/
 Para distribuir PyInstaller GUI Builder como un ejecutable independiente:
 
 ```bash
-pyinstaller --onefile --windowed --icon=icon.ico --name=PyInstallerGUI --add-data "icon.ico;." main.py
+pyinstaller --onefile --windowed --clean --icon "assets/icon.ico" --name=PyInstallerGUI --add-data "assets;assets" main.py
 ```
 
 O simplemente usa la propia aplicación para compilarse a sí misma:
