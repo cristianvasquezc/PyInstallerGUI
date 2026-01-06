@@ -5,12 +5,14 @@ from src.utils import get_python_path, get_pyinstaller_path
 class SettingsWindow(tk.Toplevel):
     def __init__(self, parent, current_python, current_pyinstaller, callback):
         super().__init__(parent)
+        self.withdraw()
         self.callback = callback
         
         self.title("Configuración")
         self.set_app_icon()
         self.resizable(False, False)
         self.center_window(500, 150)
+        self.deiconify()
         self.transient(parent)
         self.grab_set()
 
