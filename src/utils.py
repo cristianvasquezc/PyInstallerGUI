@@ -57,4 +57,4 @@ def check_env(*buttons):
         except Exception:
             pass
 
-    return ok
+    return {"python": python_ok, "pyinstaller": pyinstaller_ok, "ok": ok}
