@@ -10,9 +10,10 @@ if __name__ == "__main__":
     
     env = check_env()
 
+    MainScreen(root)
+    root.deiconify()   
+
     if not env["ok"]:
         DependencyWindow(root, env["python"], env["pyinstaller"])
 
-    MainScreen(root)
-    root.deiconify()   
     root.mainloop()
