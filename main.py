@@ -1,6 +1,6 @@
 import tkinter as tk
 from src.screens.main_screen import MainScreen
-from src.utils import resource_path, check_env
+from src.utils import check_env
 from src.screens.dependency_screen import DependencyWindow
 
 # =========================
