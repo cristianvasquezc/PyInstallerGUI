@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
 from PIL import Image, ImageTk
 from src.screens.build_screen import BuildWindow
-from src.utils import resource_path, set_app_icon, center_window, check_env
+from src.utils import check_env
 import os
 
 class MainScreen:
@@ -10,9 +10,9 @@ class MainScreen:
     def __init__(self, root):
         self.root = root
         root.title("PyInstaller GUI Builder")
-        set_app_icon(root)
+        root.set_app_icon()
         root.resizable(False, False)
-        center_window(root, 780, 420)
+        root.center_window(780, 380)
 
         self.data_files = []
         self.binaries = []
@@ -77,11 +77,11 @@ class MainScreen:
         self.noupx = tk.BooleanVar()
         self.windowed = tk.BooleanVar(value=True)
 
-        ttk.Checkbutton(options, text="Onefile", variable=self.onefile).grid(row=0, column=0, padx=6)
-        ttk.Checkbutton(options, text="Clean build", variable=self.clean).grid(row=0, column=1, padx=6)
-        ttk.Checkbutton(options, text="Strip", variable=self.strip).grid(row=0, column=2, padx=6)
-        ttk.Checkbutton(options, text="Un UPX", variable=self.noupx).grid(row=0, column=3, padx=6)
-        ttk.Checkbutton(options, text="Windowed (Sin consola)", variable=self.windowed).grid(row=0, column=4, padx=6)
+        ttk.Checkbutton(options, text="Windowed (Sin consola)", variable=self.windowed).grid(row=0, column=0, padx=6)
+        ttk.Checkbutton(options, text="Onefile", variable=self.onefile).grid(row=0, column=1, padx=6)
+        ttk.Checkbutton(options, text="Clean build", variable=self.clean).grid(row=0, column=2, padx=6)
+        ttk.Checkbutton(options, text="Strip", variable=self.strip).grid(row=0, column=3, padx=6)
+        ttk.Checkbutton(options, text="Un UPX", variable=self.noupx).grid(row=0, column=4, padx=6)
 
         # ===== NOTEBOOK =====
         notebook = ttk.Notebook(main)
@@ -360,22 +360,11 @@ class MainScreen:
 def simple_input(parent):
     w = tk.Toplevel(parent)
     w.title("Hidden import")
-    width = 300
-    height = 100
-    w.geometry(f"{width}x{height}")
+    w.set_app_icon()
     w.resizable(False, False)
+    w.center_window(300, 100)
     w.grab_set()
-
     w.update_idletasks()
-    screen_width = w.winfo_screenwidth()
-    screen_height = w.winfo_screenheight()
-    x = (screen_width // 2) - (width // 2)
-    y = (screen_height // 2) - (height // 2)
-    w.geometry(f"{width}x{height}+{x}+{y}")
-
-    icon_path = resource_path("icon.ico")
-    if os.path.exists(icon_path):
-        w.iconbitmap(icon_path)
 
     ttk.Label(w, text="Nombre del módulo").pack(pady=10)
     e = ttk.Entry(w,width=40)
