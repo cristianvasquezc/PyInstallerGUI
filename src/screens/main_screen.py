@@ -17,6 +17,7 @@ class MainScreen:
         self.data_files = []
         self.binaries = []
         self.hidden_imports = []
+        self.collect_all_list = []
         self.icon_path = None
         self.icon_img = None
 
@@ -90,6 +91,7 @@ class MainScreen:
         self.tab_data(notebook)
         self.tab_binaries(notebook) 
         self.tab_imports(notebook)
+        self.tab_collect_all(notebook)
         self.tab_advanced(notebook)
 
         # ===== PROCESAR =====
@@ -184,6 +186,30 @@ class MainScreen:
 
         self.list_imports.bind("<<ListboxSelect>>", lambda e: self.on_select(self.list_imports, self.btn_remove_imp))
 
+    def tab_collect_all(self, nb):
+        tab = ttk.Frame(nb)
+        nb.add(tab, text="Collect All")
+
+        main_frame = ttk.Frame(tab)
+        main_frame.pack(fill="both", expand=True, padx=5, pady=5)
+
+        list_frame = ttk.Frame(main_frame)
+        list_frame.pack(side="left", fill="both", expand=True)
+
+        self.list_collect = tk.Listbox(list_frame, height=6)
+        self.list_collect.pack(fill="both", expand=True)
+
+        btns = ttk.Frame(main_frame)
+        btns.pack(side="left", fill="y", padx=(10, 0))
+
+        ttk.Button(btns, text="Añadir", command=self.add_collect).pack(fill="x", pady=(0, 5))
+        
+        self.btn_remove_collect = ttk.Button(btns, text="Eliminar", command=self.remove_collect)
+        self.btn_remove_collect.pack(fill="x")
+        self.btn_remove_collect.state(["disabled"])
+
+        self.list_collect.bind("<<ListboxSelect>>", lambda e: self.on_select(self.list_collect, self.btn_remove_collect))
+
     def tab_advanced(self, nb):
         tab = ttk.Frame(nb)
         nb.add(tab, text="Avanzado")
@@ -270,6 +296,19 @@ class MainScreen:
             self.list_imports.delete(sel)
             self.btn_remove_imp.state(["disabled"])
 
+    def add_collect(self):
+        name = simple_input(self.root)
+        if name:
+            self.collect_all_list.append(name)
+            self.list_collect.insert(tk.END, name)
+
+    def remove_collect(self):
+        sel = self.list_collect.curselection()
+        if sel:
+            self.collect_all_list.pop(sel[0])
+            self.list_collect.delete(sel)
+            self.btn_remove_collect.state(["disabled"])
+
     def process(self):
         script = self.entry_script.get().strip()
         name = self.entry_name.get().strip()
@@ -344,6 +383,9 @@ class MainScreen:
     
         for h in self.hidden_imports:
             cmd.append(f'--hidden-import {h}')
+
+        for c in self.collect_all_list:
+            cmd.append(f'--collect-all "{c}"')
     
         if self.debug.get():
             cmd.append(f'--debug {self.debug.get()}')
@@ -360,7 +402,7 @@ class MainScreen:
 def simple_input(parent):
     w = tk.Toplevel(parent)
     w.withdraw()
-    w.title("Hidden import")
+    w.title("Agregar módulo")
     w.set_app_icon()
     w.resizable(False, False)
     w.center_window(300, 100)
