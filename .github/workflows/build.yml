@@ -1,0 +1,73 @@
+name: Build and Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Get version
+      id: get_version
+      shell: pwsh
+      run: |
+        $version = (Get-Content version.py | Select-String -Pattern 'VERSION = "(.*)"').Matches.Groups[1].Value
+        "APP_VERSION=$version" | Out-File -FilePath $env:GITHUB_ENV -Append
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build Portable Version (OneFile)
+      run: |
+        pyinstaller --onefile --windowed --icon=assets/icon.ico --name=PyInstallerGUI_Portable --add-data "assets;assets" main.py
+
+    - name: Build Installer Version (OneDir)
+      run: |
+        pyinstaller --onedir --windowed --icon=assets/icon.ico --name=PyInstallerGUI --add-data "assets;assets" --add-data "LICENSE;." main.py
+
+    - name: Set up NSIS
+      run: choco install nsis -y
+
+    - name: Fix Encoding
+      run: |
+        $nsi = Get-Content installer/setup.nsi -Raw
+        [System.IO.File]::WriteAllText("installer/setup.nsi", $nsi, [System.Text.Encoding]::UTF8)
+        $license = Get-Content LICENSE -Raw
+        [System.IO.File]::WriteAllText("LICENSE", $license, [System.Text.Encoding]::UTF8)
+
+    - name: Build NSIS Installer
+      uses: joncloud/makensis-action@v4
+      with:
+        script-file: installer/setup.nsi
+        arguments: /DPRODUCT_VERSION=${{ env.APP_VERSION }}
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: PyInstallerGUI-Builds
+        path: |
+          dist/PyInstallerGUI_Portable.exe
+          PyInstallerGUI.exe
+
+    - name: Publish to Release
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          dist/PyInstallerGUI_Portable.exe
+          PyInstallerGUI.exe
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
