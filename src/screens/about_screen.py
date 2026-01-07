@@ -51,3 +51,4 @@ class AboutWindow(tk.Toplevel):
         ttk.Button(main, text="Cerrar", command=self.destroy).pack(pady=(25, 0))
         
         self.deiconify()
+        self.bind("<Escape>", lambda e: self.destroy())
