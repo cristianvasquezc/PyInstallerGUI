@@ -42,11 +42,16 @@ jobs:
       run: choco install nsis -y
 
     - name: Fix Encoding
+      shell: pwsh
       run: |
+        $utf8BOM = New-Object System.Text.UTF8Encoding $True
         $nsi = Get-Content installer/setup.nsi -Raw
-        [System.IO.File]::WriteAllText("installer/setup.nsi", $nsi, [System.Text.Encoding]::UTF8)
+        [System.IO.File]::WriteAllText("installer/setup.nsi", $nsi, $utf8BOM)
         $license = Get-Content LICENSE -Raw
-        [System.IO.File]::WriteAllText("LICENSE", $license, [System.Text.Encoding]::UTF8)
+        [System.IO.File]::WriteAllText("LICENSE", $license, $utf8BOM)
+
+    - name: Debug - List Dist
+      run: dir dist
 
     - name: Build NSIS Installer
       uses: joncloud/makensis-action@v4
