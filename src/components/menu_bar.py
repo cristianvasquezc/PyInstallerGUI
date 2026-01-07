@@ -1,6 +1,7 @@
 import tkinter as tk
 from src.screens.settings_screen import SettingsWindow
 from src.screens.about_screen import AboutWindow
+from src.screens.update_screen import UpdateWindow
 
 class MenuBar(tk.Menu):
     def __init__(self, main_screen):
@@ -17,6 +18,8 @@ class MenuBar(tk.Menu):
         self.add_cascade(label="Archivo", menu=file_menu)
 
         help_menu = tk.Menu(self, tearoff=0)
+        help_menu.add_command(label="Buscar actualizaciones", command=self.check_updates)
+        help_menu.add_separator()
         help_menu.add_command(label="Acerca de", command=self.show_about)
         self.add_cascade(label="Ayuda", menu=help_menu)
 
@@ -32,3 +35,6 @@ class MenuBar(tk.Menu):
 
     def show_about(self, event=None):
         AboutWindow(self.main_screen.root)
+
+    def check_updates(self, event=None):
+        UpdateWindow(self.main_screen.root)
