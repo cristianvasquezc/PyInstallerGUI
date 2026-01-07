@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 import webbrowser
 from src.utils import resource_path
+from version import VERSION
 
 class AboutWindow(tk.Toplevel):
     def __init__(self, parent):
@@ -26,7 +27,7 @@ class AboutWindow(tk.Toplevel):
         ).pack(pady=(10, 5))
 
         # Version
-        ttk.Label(main, text="v1.0.0", foreground="#666").pack()
+        ttk.Label(main, text=f"v{VERSION}", foreground="#666").pack()
 
         # Description
         ttk.Label(
