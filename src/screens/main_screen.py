@@ -5,6 +5,7 @@ from src.screens.build_screen import BuildWindow
 from src.components.menu_bar import MenuBar
 from src.utils import check_env, get_python_path, get_pyinstaller_path
 import os
+import windnd
 
 class MainScreen:
 
@@ -33,6 +34,8 @@ class MainScreen:
         )
 
         self.build_ui()
+        
+        windnd.hook_dropfiles(self.root, self.handle_drop)
 
         self.default_icon = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
@@ -404,6 +407,52 @@ class MainScreen:
     
         workdir = os.path.abspath(os.path.dirname(script))
         BuildWindow(self.root, " ".join(cmd), workdir)
+
+    def handle_drop(self, files):
+        decoded_files = []
+        for f in files:
+            if isinstance(f, bytes):
+                try:
+                    decoded_files.append(f.decode('utf-8'))
+                except UnicodeDecodeError:
+                    decoded_files.append(f.decode('latin-1')) 
+            else:
+                decoded_files.append(f)
+
+        x, y = self.root.winfo_pointerxy()
+        widget = self.root.winfo_containing(x, y)
+        
+        target_listbox = None
+        current = widget
+        while current:
+            if current == self.list_data:
+                target_listbox = "data"
+                break
+            if current == self.list_binaries:
+                target_listbox = "binaries"
+                break
+            try:
+                current = current.master
+            except (AttributeError, Exception):
+                break
+        
+        if not target_listbox:
+            return
+
+        for f in decoded_files:
+            if not os.path.exists(f): continue
+            
+            if target_listbox == "data":
+                if f not in self.data_files:
+                    self.data_files.append(f)
+                    type_str = "(Carpeta)" if os.path.isdir(f) else "(Archivo)"
+                    self.list_data.insert(tk.END, f"{f} {type_str}")
+            
+            elif target_listbox == "binaries":
+                if os.path.isfile(f):
+                    if f not in self.binaries:
+                        self.binaries.append(f)
+                        self.list_binaries.insert(tk.END, f)
 
 # =========================
 def simple_input(parent):
