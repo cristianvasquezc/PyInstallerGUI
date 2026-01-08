@@ -52,9 +52,17 @@ def get_pyinstaller_path():
 def is_pyinstaller_installed():
     return get_pyinstaller_path() != ""
 
-def check_env(*buttons):
-    python_ok = is_python_installed()
-    pyinstaller_ok = is_pyinstaller_installed()
+def check_env(*buttons, python_path=None, pyinstaller_path=None):
+    if python_path and os.path.isfile(python_path):
+        python_ok = True
+    else:
+        python_ok = is_python_installed()
+    
+    if pyinstaller_path and os.path.isfile(pyinstaller_path):
+        pyinstaller_ok = True
+    else:
+        pyinstaller_ok = is_pyinstaller_installed()
+    
     ok = python_ok and pyinstaller_ok
 
     for btn in buttons:
