@@ -1,9 +1,7 @@
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
-from PIL import Image, ImageTk
+from tkinter import ttk, messagebox
 import subprocess
 import threading
-import os
 
 class BuildWindow(tk.Toplevel):
     def __init__(self, parent, command, workdir):

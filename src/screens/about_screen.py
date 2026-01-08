@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
 import webbrowser
-from src.utils import resource_path
 from version import VERSION
 
 class AboutWindow(tk.Toplevel):

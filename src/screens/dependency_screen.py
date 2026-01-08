@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
+from tkinter import ttk
 import webbrowser
 
 class DependencyWindow(tk.Toplevel):
