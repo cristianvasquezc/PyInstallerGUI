@@ -30,6 +30,8 @@ class MenuBar(tk.Menu):
         def save_callback(py, pi):
             self.main_screen.python_path = py
             self.main_screen.pyinstaller_path = pi
+            from src.utils import check_env
+            check_env(self.main_screen.btn_process, python_path=py, pyinstaller_path=pi)
             
         SettingsWindow(self.main_screen.root, self.main_screen.python_path, self.main_screen.pyinstaller_path, save_callback)
 
