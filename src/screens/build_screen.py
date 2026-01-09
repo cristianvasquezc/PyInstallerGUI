@@ -4,9 +4,10 @@ import subprocess
 import threading
 
 class BuildWindow(tk.Toplevel):
-    def __init__(self, parent, command, workdir):
+    def __init__(self, parent, command, workdir, env=None):
         super().__init__(parent)
         self.workdir = workdir
+        self.env = env
         
         self.title("Proceso PyInstaller")
         self.set_app_icon()
@@ -52,7 +53,8 @@ class BuildWindow(tk.Toplevel):
             cwd=self.workdir,
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
-            text=True
+            text=True,
+            env=self.env
         )
 
         for line in process.stdout:

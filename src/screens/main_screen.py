@@ -406,7 +406,17 @@ class MainScreen:
         cmd.append(f'"{script}"')
     
         workdir = os.path.abspath(os.path.dirname(script))
-        BuildWindow(self.root, " ".join(cmd), workdir)
+
+        env = os.environ.copy()
+        keys_to_remove = ["TCL_LIBRARY", "TK_LIBRARY", "PYTHONPATH", "PYTHONHOME"]
+        for key in keys_to_remove:
+            env.pop(key, None)
+
+        if self.python_path and os.path.exists(self.python_path):
+            python_dir = os.path.dirname(self.python_path)
+            env["PATH"] = python_dir + os.pathsep + env.get("PATH", "")
+
+        BuildWindow(self.root, " ".join(cmd), workdir, env=env)
 
     def handle_drop(self, files):
         decoded_files = []
